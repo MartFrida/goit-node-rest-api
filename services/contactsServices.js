@@ -2,6 +2,7 @@ import fs from 'fs/promises'
 import { nanoid } from 'nanoid'
 import path from 'path'
 
+
 const contactsPath = path.resolve('db', 'contacts.json')
 const updateContacts = contacts => fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
 
@@ -28,11 +29,17 @@ export async function removeContact(contactId) {
 }
 
 export async function addContact(data) {
+  const { name, email, phone } = data
   const contacts = await listContacts()
+  const isExist = contacts.some(item => item.name === name || item.email === email || item.phone === phone)
   const newContact = {
     id: nanoid(),
     ...data,
   }
+  if (isExist) {
+    return ('User with the same data exist')
+  }
+
   contacts.push(newContact)
   await updateContacts(contacts)
   return newContact
