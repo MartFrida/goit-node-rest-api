@@ -29,24 +29,11 @@ const deleteContact = async (req, res) => {
 };
 
 const createContact = async (req, res) => {
-
-  const { error } = createContactSchema.validate(req.body)
-  if (error) {
-    throw HttpError(400, error.message)
-  }
-
   const result = await contactsService.addContact(req.body)
   res.status(201).json(result)
-
 };
 
 const updateContact = async (req, res) => {
-
-  const { error } = updateContactSchema.validate(req.body)
-  if (error) {
-    throw HttpError(400, error.message)
-  }
-
   if (Object.keys(req.body).length === 0) {
     throw HttpError(400, "Body must have at least one field")
   }
