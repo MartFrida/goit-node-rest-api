@@ -1,7 +1,6 @@
 import * as contactsService from "../services/contactsServices.js";
 import HttpError from '../helpers/HttpError.js'
 import { createContactSchema, updateContactSchema } from '../schemas/contactsSchemas.js'
-import validateBody from '../helpers/validateBody.js'
 
 export const getAllContacts = async (req, res, next) => {
   try {
@@ -46,6 +45,7 @@ export const createContact = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message)
     }
+
     const result = await contactsService.addContact(req.body)
     res.status(201).json(result)
 
