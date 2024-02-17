@@ -3,9 +3,8 @@ import morgan from "morgan";
 import cors from "cors";
 import contactsRouter from "./routes/contactsRouter.js";
 import mongoose from "mongoose";
-import dotenv from 'dotenv'
+import 'dotenv/config'
 
-dotenv.config()
 const app = express();
 
 app.use(morgan("tiny"));
@@ -24,6 +23,7 @@ app.use((err, req, res, next) => {
 });
 
 const { DB_HOST, PORT = 4000 } = process.env
+
 mongoose.connect(DB_HOST)
   .then(() => {
     app.listen(PORT, () => {
@@ -36,4 +36,3 @@ mongoose.connect(DB_HOST)
   })
 
 
-// kLU0BIAeyD7DLR0e

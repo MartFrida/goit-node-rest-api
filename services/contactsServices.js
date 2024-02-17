@@ -23,22 +23,22 @@ export async function removeContact(contactId) {
   // return result
 }
 
-export async function addContact(data) {
-  // const { name, email, phone } = data
-  // const contacts = await listContacts()
-  // const isExist = contacts.some(item => item.name === name || item.email === email || item.phone === phone)
-  // const newContact = {
-  //   id: nanoid(),
-  //   ...data,
-  // }
-  // if (isExist) {
-  //   return ('User with the same data exist')
-  // }
+export const addContact = (data) => Contact.create(data)
+// const { name, email, phone } = data
+// const contacts = await listContacts()
+// const isExist = contacts.some(item => item.name === name || item.email === email || item.phone === phone)
+// const newContact = {
+//   id: nanoid(),
+//   ...data,
+// }
+// if (isExist) {
+//   return ('User with the same data exist')
+// }
 
-  // contacts.push(newContact)
-  // await updateContacts(contacts)
-  // return newContact
-}
+// contacts.push(newContact)
+// await updateContacts(contacts)
+// return newContact
+
 
 export async function updateContact(id, data) {
   // const contacts = await listContacts()
