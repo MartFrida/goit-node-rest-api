@@ -18,5 +18,5 @@ export async function updateContact(id, data) {
 }
 
 export async function updateStatusContact(id, data) {
-  return Contact.findByIdAndUpdate(id, { favorite: true }, { new: true, runValidators: true })
+  return Contact.findByIdAndUpdate(id, data, { new: true, runValidators: true })
 }

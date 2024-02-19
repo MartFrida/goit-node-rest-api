@@ -1,7 +1,7 @@
 import express from "express";
 import contactsControllers from "../controllers/contactsControllers.js";
 import validateBody from '../helpers/validateBody.js'
-import { createContactSchema, updateContactSchema } from '../schemas/contactsSchemas.js'
+import { createContactSchema, updateContactSchema, updateContactFavoriteSchema } from '../schemas/contactsSchemas.js'
 import isValidId from "../middlewares/isValidId.js";
 
 const {
@@ -10,7 +10,6 @@ const {
   deleteContact,
   createContact,
   updateContact,
-  updateContactFavorite,
 } = contactsControllers;
 
 const contactsRouter = express.Router();
@@ -25,6 +24,6 @@ contactsRouter.post("/", validateBody(createContactSchema), createContact);
 
 contactsRouter.put("/:id", isValidId, validateBody(updateContactSchema), updateContact);
 
-contactsRouter.patch("/:id/favorite", isValidId, validateBody(updateContactSchema), updateContactFavorite);
+contactsRouter.patch("/:id/favorite", isValidId, validateBody(updateContactFavoriteSchema), updateContact);
 
 export default contactsRouter;

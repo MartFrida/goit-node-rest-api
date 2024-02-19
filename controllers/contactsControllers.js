@@ -45,7 +45,7 @@ const updateContact = async (req, res) => {
 
 const updateContactFavorite = async (req, res) => {
   const { id } = req.params
-  const result = await contactsService.updateContact(id, req.body)
+  const result = await contactsService.updateStatusContact(id, req.body)
   if (!result) {
     throw HttpError(404)
   }
