@@ -1,58 +1,22 @@
-import fs from 'fs/promises'
-import { nanoid } from 'nanoid'
-import path from 'path'
+import Contact from '../models/Contact.js'
 
 
-const contactsPath = path.resolve('db', 'contacts.json')
-const updateContacts = contacts => fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
-
-export async function listContacts() {
-  const data = await fs.readFile(contactsPath, "utf-8")
-  return JSON.parse(data)
-}
+export const listContacts = () => Contact.find({}, "-createdAt -updatedAt")
 
 export async function getContactById(contactId) {
-  const contacts = await listContacts()
-  const result = contacts.find(item => item.id === contactId)
-  return result || null
+  return Contact.findById(contactId)
 }
 
 export async function removeContact(contactId) {
-  const contacts = await listContacts()
-  const index = contacts.findIndex(item => item.id === contactId)
-  if (index === -1) {
-    return null
-  }
-  const [result] = contacts.splice(index, 1)
-  await updateContacts(contacts)
-  return result
+  return Contact.findByIdAndDelete(contactId)
 }
 
-export async function addContact(data) {
-  const { name, email, phone } = data
-  const contacts = await listContacts()
-  const isExist = contacts.some(item => item.name === name || item.email === email || item.phone === phone)
-  const newContact = {
-    id: nanoid(),
-    ...data,
-  }
-  if (isExist) {
-    return ('User with the same data exist')
-  }
-
-  contacts.push(newContact)
-  await updateContacts(contacts)
-  return newContact
-}
+export const addContact = (data) => Contact.create(data)
 
 export async function updateContact(id, data) {
-  const contacts = await listContacts()
-  const index = contacts.findIndex(item => item.id === id)
-  if (index === -1) {
-    return null
-  }
+  return Contact.findByIdAndUpdate(id, data, { new: true, runValidators: true })
+}
 
-  contacts[index] = { ...contacts[index], ...data }
-  await updateContacts(contacts)
-  return contacts[index]
+export async function updateStatusContact(id, data) {
+  return Contact.findByIdAndUpdate(id, data, { new: true, runValidators: true })
 }
