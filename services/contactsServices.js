@@ -1,6 +1,5 @@
 import Contact from '../models/Contact.js'
 
-
 export const listContacts = () => Contact.find({}, "-createdAt -updatedAt")
 
 export async function getContactById(contactId) {
