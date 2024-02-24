@@ -11,12 +11,14 @@ const signup = async (req, res) => {
   const { email } = req.body;
   const user = await userServices.findUser({ email })
   if (user) {
-    throw HttpError(409, 'Email is already in use')
+    throw HttpError(409, 'Email in use')
   }
   const newUser = await authServises.signup(req.body);
   res.status(201).json({
-    username: newUser.username,
-    email: newUser.email,
+    user: {
+      email: newUser.email,
+      subscription: "starter",
+    }
   })
 };
 
@@ -24,31 +26,33 @@ const signin = async (req, res) => {
   const { email, password } = req.body;
   const user = await userServices.findUser({ email })
   if (!user) {
-    throw HttpError(401, 'Email or password invalid')
+    throw HttpError(401, 'Email or password is wrong')
   }
   const passwordCompare = await bcrypt.compare(password, user.password)
   if (!passwordCompare) {
-    throw HttpError(401, 'Password invalid')
+    throw HttpError(401, 'Email or password is wrong')
   }
-
   const payload = {
     id: user._id
   }
-
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '23h' })
   await authServises.setToken(user._id, token)
 
   res.json({
     token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    }
   })
 }
 
 const getCurrent = async (req, res) => {
-  const { email, username } = req.user;
+  const { email, subscription } = req.user;
 
   res.json({
     email,
-    username,
+    subscription,
   })
 }
 
