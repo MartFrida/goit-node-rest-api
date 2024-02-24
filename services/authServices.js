@@ -6,3 +6,5 @@ export const signup = async (data) => {
   const hashPassword = await bcrypt.hash(password, 10);
   return User.create({ ...data, password: hashPassword })
 }
+
+export const setToken = (id, token = '') => User.findByIdAndUpdate(id, { token })

@@ -36,13 +36,34 @@ const signin = async (req, res) => {
   }
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '23h' })
+  await authServises.setToken(user._id, token)
 
   res.json({
     token,
   })
 }
 
+const getCurrent = async (req, res) => {
+  const { email, username } = req.user;
+
+  res.json({
+    email,
+    username,
+  })
+}
+
+const signout = async (req, res) => {
+  const { _id } = req.user
+  await authServises.setToken(_id)
+
+  res.json({
+    message: 'Signout success'
+  })
+}
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
+  getCurrent: ctrlWrapper(getCurrent),
+  signout: ctrlWrapper(signout),
 }
