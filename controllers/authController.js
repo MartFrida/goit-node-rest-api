@@ -4,19 +4,35 @@ import HttpError from '../helpers/HttpError.js';
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import fs from 'fs/promises';
+import path from 'path';
+import gravatar from 'gravatar';
+
+
+
+const avatarDir = path.resolve('public', 'avatars')
 
 const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
+  const gravatarPath = gravatar.profile_url(req.body.email, { format: 'jpg' });
+  console.log('gravatarPath: ', gravatarPath)
+  console.log(req.body)
+  console.log(req.file)
+  const { path: oldPath, filename } = req.file
+  const newPath = path.join(avatarDir, filename)
+  await fs.rename(oldPath, newPath)
   const { email } = req.body;
   const user = await userServices.findUser({ email })
   if (user) {
     throw HttpError(409, 'Email in use')
   }
-  const newUser = await authServises.signup(req.body);
+  const avatar = path.join('avatars', filename)
+  const newUser = await authServises.signup(req.body, avatar);
   res.status(201).json({
     user: {
       email: newUser.email,
+      avatarURL: avatar,
       subscription: "starter",
     }
   })
@@ -42,6 +58,7 @@ const signin = async (req, res) => {
     token,
     user: {
       email: user.email,
+      avatarURL: user.avatarURL,
       subscription: user.subscription,
     }
   })
