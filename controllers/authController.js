@@ -9,7 +9,7 @@ import path from 'path';
 import gravatar from 'gravatar';
 import Jimp from 'jimp';
 
-const avatarDir = path.resolve('avatars')
+const avatarDir = path.resolve('public', 'avatars')
 
 const { JWT_SECRET } = process.env;
 
