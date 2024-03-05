@@ -3,9 +3,8 @@ import contactsControllers from "../controllers/contactsControllers.js";
 import validateBody from '../helpers/validateBody.js'
 import { createContactSchema, updateContactSchema, updateContactFavoriteSchema } from '../schemas/contactsSchemas.js'
 import isValidId from "../middlewares/isValidId.js";
-import authenticate from "../middlewares/authenticate.js"
-import upload from "../middlewares/upload.js";
 
+import authenticate from "../middlewares/authenticate.js";
 const {
   getAllContacts,
   getOneContact,
