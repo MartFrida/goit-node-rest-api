@@ -8,3 +8,4 @@ export const signup = async (data, avatar) => {
 }
 
 export const setToken = (id, token = '') => User.findByIdAndUpdate(id, { token })
+

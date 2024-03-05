@@ -7,32 +7,26 @@ import jwt from 'jsonwebtoken';
 import fs from 'fs/promises';
 import path from 'path';
 import gravatar from 'gravatar';
+import Jimp from 'jimp';
 
-
-
-const avatarDir = path.resolve('public', 'avatars')
+const avatarDir = path.resolve('avatars')
 
 const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
-  const gravatarPath = gravatar.profile_url(req.body.email, { format: 'jpg' });
-  console.log('gravatarPath: ', gravatarPath)
-  console.log(req.body)
-  console.log(req.file)
-  const { path: oldPath, filename } = req.file
-  const newPath = path.join(avatarDir, filename)
-  await fs.rename(oldPath, newPath)
+
+
   const { email } = req.body;
   const user = await userServices.findUser({ email })
   if (user) {
     throw HttpError(409, 'Email in use')
   }
-  const avatar = path.join('avatars', filename)
-  const newUser = await authServises.signup(req.body, avatar);
+  const gravatarPath = gravatar.url(email);
+  const newUser = await authServises.signup(req.body, gravatarPath);
   res.status(201).json({
     user: {
       email: newUser.email,
-      avatarURL: avatar,
+      avatarURL: newUser.gravatarPath,
       subscription: "starter",
     }
   })
@@ -82,9 +76,35 @@ const signout = async (req, res) => {
   })
 }
 
+async function updateAvatar(req, res) {
+  const { _id } = req.user
+  const { path: oldPath, filename } = req.file
+  Jimp.read(oldPath)
+    .then((image) => {
+      if (!image) {
+        return;
+      }
+      return image
+        .cover(250, 250)
+        .quality(60)
+        .write(newPath);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  const newPath = path.join(avatarDir, filename)
+  await fs.rename(oldPath, newPath)
+
+  const avatarURL = path.join(avatarDir, filename)
+  const newUser = await userServices.updateAvatar(_id, avatarURL)
+
+  res.json({ avatarURL: newUser.avatarURL })
+}
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   signout: ctrlWrapper(signout),
+  updateAvatar: ctrlWrapper(updateAvatar),
 }
