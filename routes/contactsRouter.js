@@ -3,8 +3,8 @@ import contactsControllers from "../controllers/contactsControllers.js";
 import validateBody from '../helpers/validateBody.js'
 import { createContactSchema, updateContactSchema, updateContactFavoriteSchema } from '../schemas/contactsSchemas.js'
 import isValidId from "../middlewares/isValidId.js";
-import authenticate from "../middlewares/authenticate.js";
 
+import authenticate from "../middlewares/authenticate.js";
 const {
   getAllContacts,
   getOneContact,
@@ -17,13 +17,14 @@ const contactsRouter = express.Router();
 
 contactsRouter.use(authenticate);
 
+
 contactsRouter.get("/", getAllContacts);
 
 contactsRouter.get("/:id", isValidId, getOneContact);
 
 contactsRouter.delete("/:id", isValidId, deleteContact);
 
-contactsRouter.post("/", validateBody(createContactSchema), createContact);
+contactsRouter.post("/", upload.single('photo'), validateBody(createContactSchema), createContact);
 
 contactsRouter.put("/:id", isValidId, validateBody(updateContactSchema), updateContact);
 
