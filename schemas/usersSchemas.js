@@ -11,3 +11,7 @@ export const signinSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().required(),
 })
+
+export const verifyEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+})

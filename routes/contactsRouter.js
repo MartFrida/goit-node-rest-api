@@ -17,14 +17,13 @@ const contactsRouter = express.Router();
 
 contactsRouter.use(authenticate);
 
-
 contactsRouter.get("/", getAllContacts);
 
 contactsRouter.get("/:id", isValidId, getOneContact);
 
 contactsRouter.delete("/:id", isValidId, deleteContact);
 
-contactsRouter.post("/", upload.single('photo'), validateBody(createContactSchema), createContact);
+contactsRouter.post("/", validateBody(createContactSchema), createContact);
 
 contactsRouter.put("/:id", isValidId, validateBody(updateContactSchema), updateContact);
 

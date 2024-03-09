@@ -23,6 +23,14 @@ const userSchema = new Schema({
     enum: ["starter", "pro", "business"],
     default: "starter"
   },
+  verify: {
+    type: Boolean,
+    default: false,
+    // required: true,
+  },
+  verificationCode: {
+    type: String,
+  },
   token: {
     type: String,
     default: null,
